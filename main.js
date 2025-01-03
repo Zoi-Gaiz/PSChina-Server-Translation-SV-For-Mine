@@ -11966,6 +11966,30 @@ function translateElement(element) {
         }
     }
 }
+function translatep(element) {
+    var elTW = document.createTreeWalker(element, NodeFilter.SHOW_Text, null, false);
+    var node = null;
+    var translate = t; // 假设 t 是翻译函数
+
+    while ((node = elTW.nextNode()) != null) {
+        if (node.nodeType === Node.TEXT_NODE) {
+
+        var value = node.nodeValue;
+
+        // 拆分句子为单词
+        var words = value.split(/\s+/); // 根据空格拆分单词
+
+        // 对每个单词进行翻译并存储到新数组
+        var translatedWords = words.map(function(word) {
+            // 对每个单词进行翻译
+            return translate(word);
+        });
+
+        // 重新组合翻译后的单词
+        node.nodeValue = translatedWords.join(' ');
+    }
+    }
+}
 
 (function() {
     'use strict';
@@ -11978,7 +12002,6 @@ function translateElement(element) {
             }
         }
     };
-  //change here
     var blockMovesetInfoElements = document.getElementsByClassName('BlockMovesetInfo');
     for (var i = 0; i < blockMovesetInfoElements.length; i++) {
         translateElement(blockMovesetInfoElements[i]);
@@ -11986,6 +12009,10 @@ function translateElement(element) {
     var paragraphElements = document.getElementsByTagName('p');
     for (var j = 0; j < paragraphElements.length; j++) {
         translateElement(paragraphElements[j]);
+    }
+    var pa = document.getElementsByTagName('p');
+    for (var sj = 0; sj < pa.length; sj++) {
+        translatep(pa[sj]);
     }
     const observer = new MutationObserver(observerCallback);
 
